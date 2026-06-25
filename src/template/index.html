@@ -82,10 +82,17 @@
         .bento-cell {
             background: #fff;
             border: 2px solid #1A1814;
-            box-shadow: 8px 8px 0px 0px rgba(26,24,20,1);
+            box-shadow: 6px 6px 0px 0px rgba(26,24,20,1);
             border-radius: 16px;
-            padding: 2rem;
+            padding: 1.5rem;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        @media (min-width: 768px) {
+            .bento-cell {
+                box-shadow: 8px 8px 0px 0px rgba(26,24,20,1);
+                padding: 2rem;
+            }
         }
         
         .bento-cell:hover {
@@ -103,7 +110,12 @@
         }
         .brutalist-cell {
             background-color: #F9F6F0;
-            padding: 2rem;
+            padding: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .brutalist-cell {
+                padding: 2rem;
+            }
         }
     </style>
 </head>
@@ -119,96 +131,105 @@
         
         <!-- HERO SECTION -->
         <section class="h-[100dvh] flex flex-col justify-center px-6 md:px-16 relative">
-            <div class="text-[15vw] leading-[0.8] font-black uppercase tracking-tighter" id="hero-title">
+            <div class="text-[12vw] sm:text-[15vw] leading-[0.8] font-black uppercase tracking-tighter" id="hero-title">
                 <div class="overflow-hidden"><div class="hero-line">Your</div></div>
                 <div class="overflow-hidden"><div class="hero-line text-accent-blue">High School</div></div>
                 <div class="overflow-hidden"><div class="hero-line outline-text">Career</div></div>
                 <div class="overflow-hidden"><div class="hero-line">Wrapped</div></div>
             </div>
-            <div class="absolute bottom-10 left-6 md:left-16 font-mono uppercase tracking-widest text-sm flex gap-8">
+            <div class="absolute bottom-10 left-6 md:left-16 font-mono uppercase tracking-widest text-sm flex flex-col sm:flex-row gap-4 sm:gap-8">
                 <div>Scroll down to begin</div>
                 <div id="data-count">Total Data Points: ---</div>
             </div>
         </section>
 
         <!-- MARQUEE SECTION -->
-        <section class="py-12 border-y-4 border-ink bg-accent-yellow overflow-hidden whitespace-nowrap flex" id="marquee-section">
-            <div class="marquee-track text-6xl md:text-8xl font-black uppercase tracking-tight" id="marquee-content">
+        <section class="py-6 md:py-12 border-y-4 border-ink bg-accent-yellow overflow-hidden whitespace-nowrap flex" id="marquee-section">
+            <div class="marquee-track text-4xl sm:text-6xl md:text-8xl font-black uppercase tracking-tight" id="marquee-content">
                 <!-- Injected via JS -->
             </div>
         </section>
 
         <!-- THE NIGHT OWL (PINNED REVEAL) -->
         <section id="night-owl-wrap" class="relative">
-            <div id="night-owl-panel" class="min-h-[100dvh] bg-ink text-cream flex items-center justify-center p-6 md:p-16">
-                <div class="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <h2 class="text-6xl md:text-8xl font-black uppercase leading-none mb-6">Were you a <span class="outline-text-cream">night owl?</span></h2>
-                        <p class="text-xl md:text-2xl font-mono opacity-80 max-w-lg">We analyzed the timestamps of every file you edited and downloaded over 4 years.</p>
+            <div id="night-owl-panel" class="min-h-[100dvh] bg-ink text-cream flex items-center justify-center p-6 md:p-16 relative overflow-hidden">
+                <div class="w-full max-w-4xl mx-auto relative min-h-[50vh] flex items-center justify-center">
+                    
+                    <!-- Slide 1: The Question -->
+                    <div id="owl-slide-1" class="absolute w-full flex flex-col items-center text-center px-4">
+                        <h2 class="text-4xl sm:text-6xl md:text-8xl font-black uppercase leading-none mb-6">
+                            Were you a <br><span class="outline-text-cream">night owl?</span>
+                        </h2>
+                        <p class="text-base sm:text-xl md:text-2xl font-mono opacity-80 max-w-xl">
+                            We analyzed the timestamps of every file you edited and downloaded over 4 years.
+                        </p>
                     </div>
-                    <div class="flex flex-col items-start md:items-end text-left md:text-right">
-                        <div class="text-[12rem] md:text-[18rem] font-black leading-none text-accent-orange" id="active-hour">--</div>
-                        <p class="text-3xl font-bold uppercase mt-4">Peak Activity Hour</p>
-                        <p class="font-mono mt-4 max-w-sm" id="night-owl-desc">--</p>
+
+                    <!-- Slide 2: The Reveal -->
+                    <div id="owl-slide-2" class="absolute w-full flex flex-col items-center text-center px-4 opacity-0 pointer-events-none">
+                        <div class="text-6xl sm:text-8xl md:text-[8vw] lg:text-[9vw] xl:text-[10rem] 2xl:text-[12rem] font-black leading-none text-accent-orange" id="active-hour">--</div>
+                        <p class="text-xl sm:text-2xl md:text-3xl font-bold uppercase mt-4">Peak Activity Hour</p>
+                        <p class="font-mono mt-2 md:mt-4 max-w-xl text-sm sm:text-base md:text-lg" id="night-owl-desc">--</p>
                     </div>
+
                 </div>
             </div>
         </section>
 
         <!-- CRUNCH TIME (HORIZONTAL PAN) -->
-        <section id="crunch-wrap" class="relative overflow-hidden bg-accent-blue text-cream">
-            <div id="crunch-track" class="flex h-[100dvh] items-center px-16 w-[300vw]">
+        <section id="crunch-wrap" class="relative md:overflow-hidden bg-accent-blue text-cream">
+            <div id="crunch-track" class="flex flex-col md:flex-row h-auto md:h-[100dvh] items-start md:items-center px-6 py-16 md:px-16 w-full md:w-[300vw] gap-16 md:gap-0">
                 <!-- Intro Slide -->
-                <div class="w-screen flex-shrink-0 px-8">
-                    <h2 class="text-7xl md:text-[10rem] font-black uppercase leading-none">The <br>Crunch <br><span class="text-ink">Time</span></h2>
-                    <p class="font-mono text-2xl mt-8 max-w-xl">When did you work the hardest? By overlaying Drive edits, emails, and chats, we found your peak stress months.</p>
+                <div class="w-full md:w-screen md:flex-shrink-0 md:px-8">
+                    <h2 class="text-5xl sm:text-6xl md:text-7xl lg:text-[10rem] font-black uppercase leading-none">The <br>Crunch <br><span class="text-ink">Time</span></h2>
+                    <p class="font-mono text-base sm:text-xl md:text-2xl mt-6 md:mt-8 max-w-xl">When did you work the hardest? By overlaying Drive edits, emails, and chats, we found your peak stress months.</p>
                 </div>
                 
                 <!-- Slide 1 -->
-                <div class="w-screen flex-shrink-0 px-8 flex flex-col justify-center h-full">
-                    <p class="font-mono text-2xl text-accent-yellow mb-4 flex items-center gap-4">
+                <div class="w-full md:w-screen md:flex-shrink-0 md:px-8 flex flex-col justify-center">
+                    <p class="font-mono text-lg sm:text-xl md:text-2xl text-accent-yellow mb-4 flex items-center gap-4">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>
                         #1 Busiest Month
                     </p>
-                    <h3 class="text-[8rem] font-black leading-none uppercase" id="crunch-1-date">---</h3>
-                    <p class="text-3xl mt-4 font-bold" id="crunch-1-score">--- activity points</p>
+                    <h3 class="text-5xl sm:text-6xl md:text-[8rem] font-black leading-none uppercase" id="crunch-1-date">---</h3>
+                    <p class="text-xl sm:text-2xl md:text-3xl mt-4 font-bold" id="crunch-1-score">--- activity points</p>
                     
-                    <div class="mt-8 flex gap-8 font-mono opacity-90 border-t-2 border-cream/20 pt-8 max-w-2xl">
+                    <div class="mt-8 flex flex-wrap gap-6 sm:gap-8 font-mono opacity-90 border-t-2 border-cream/20 pt-8 max-w-2xl">
                         <div>
-                            <span class="block text-sm uppercase text-accent-yellow mb-1">Drive Edits</span>
-                            <span class="font-bold text-3xl" id="crunch-1-drive">--</span>
+                            <span class="block text-xs sm:text-sm uppercase text-accent-yellow mb-1">Drive Edits</span>
+                            <span class="font-bold text-2xl sm:text-3xl" id="crunch-1-drive">--</span>
                         </div>
                         <div>
-                            <span class="block text-sm uppercase text-accent-yellow mb-1">Emails</span>
-                            <span class="font-bold text-3xl" id="crunch-1-mail">--</span>
+                            <span class="block text-xs sm:text-sm uppercase text-accent-yellow mb-1">Emails</span>
+                            <span class="font-bold text-2xl sm:text-3xl" id="crunch-1-mail">--</span>
                         </div>
                         <div>
-                            <span class="block text-sm uppercase text-accent-yellow mb-1">Chats</span>
-                            <span class="font-bold text-3xl" id="crunch-1-chat">--</span>
+                            <span class="block text-xs sm:text-sm uppercase text-accent-yellow mb-1">Chats</span>
+                            <span class="font-bold text-2xl sm:text-3xl" id="crunch-1-chat">--</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Slide 2 & 3 -->
-                <div class="w-screen flex-shrink-0 px-8 flex items-center gap-16 h-full">
+                <div class="w-full md:w-screen md:flex-shrink-0 md:px-8 flex flex-col md:flex-row items-start md:items-center gap-12 md:gap-16">
                     <div>
-                        <p class="font-mono text-xl text-accent-yellow mb-2">#2 Busiest Month</p>
-                        <h3 class="text-6xl md:text-[6rem] font-black leading-none uppercase" id="crunch-2-date">---</h3>
-                        <p class="text-2xl mt-2 font-bold" id="crunch-2-score">--- activity points</p>
+                        <p class="font-mono text-lg sm:text-xl text-accent-yellow mb-2">#2 Busiest Month</p>
+                        <h3 class="text-4xl sm:text-5xl md:text-[6rem] font-black leading-none uppercase" id="crunch-2-date">---</h3>
+                        <p class="text-xl sm:text-2xl mt-2 font-bold" id="crunch-2-score">--- activity points</p>
                     </div>
-                    <div>
-                        <p class="font-mono text-xl text-accent-yellow mb-2">#3 Busiest Month</p>
-                        <h3 class="text-6xl md:text-[6rem] font-black leading-none uppercase" id="crunch-3-date">---</h3>
-                        <p class="text-2xl mt-2 font-bold" id="crunch-3-score">--- activity points</p>
+                    <div class="border-t border-cream/20 pt-6 w-full md:w-auto md:border-t-0 md:pt-0">
+                        <p class="font-mono text-lg sm:text-xl text-accent-yellow mb-2">#3 Busiest Month</p>
+                        <h3 class="text-4xl sm:text-5xl md:text-[6rem] font-black leading-none uppercase" id="crunch-3-date">---</h3>
+                        <p class="text-xl sm:text-2xl mt-2 font-bold" id="crunch-3-score">--- activity points</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- CONNECTIONS BENTO GRID -->
-        <section class="py-32 px-6 md:px-16 bg-cream">
+        <section class="py-16 md:py-32 px-6 md:px-16 bg-cream">
             <div class="max-w-7xl mx-auto">
-                <h2 class="text-6xl md:text-8xl font-black uppercase leading-none mb-4 text-center md:text-left">The <span class="text-accent-pink">Network</span></h2>
+                <h2 class="text-4xl sm:text-6xl md:text-8xl font-black uppercase leading-none mb-4 text-center md:text-left">The <span class="text-accent-pink">Network</span></h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Most Emailed -->
@@ -223,8 +244,8 @@
                     <div class="bento-cell bg-accent-pink text-white flex flex-col justify-between">
                         <h3 class="font-mono uppercase tracking-widest text-sm text-white/80 mb-8">Top File Format</h3>
                         <div>
-                            <div class="text-7xl font-black" id="top-format">---</div>
-                            <p class="mt-4 font-bold text-xl">The classic high school format.</p>
+                            <div class="text-5xl sm:text-7xl font-black" id="top-format">---</div>
+                            <p class="mt-4 font-bold text-lg sm:text-xl">The classic high school format.</p>
                         </div>
                     </div>
 
@@ -232,8 +253,8 @@
                     <div class="bento-cell bg-ink text-cream flex flex-col justify-between">
                         <h3 class="font-mono uppercase tracking-widest text-sm text-cream/70 mb-8">Extracurriculars</h3>
                         <div>
-                            <div class="text-8xl font-black text-accent-green" id="club-count">--</div>
-                            <p class="mt-2 font-bold text-xl">Clubs & Teams Joined</p>
+                            <div class="text-6xl sm:text-8xl font-black text-accent-green" id="club-count">--</div>
+                            <p class="mt-2 font-bold text-lg sm:text-xl">Clubs & Teams Joined</p>
                         </div>
                     </div>
 
@@ -249,16 +270,16 @@
         </section>
 
         <!-- THE DIGITAL HOARD (DRIVE STATS) -->
-        <section class="py-32 px-6 md:px-16 bg-accent-yellow text-ink border-t-4 border-ink">
+        <section class="py-16 md:py-32 px-6 md:px-16 bg-accent-yellow text-ink border-t-4 border-ink">
             <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div>
-                    <h2 class="text-6xl md:text-[8rem] font-black uppercase leading-none mb-8">The <br>Digital <br>Hoard</h2>
-                    <p class="text-xl md:text-2xl font-mono opacity-90 max-w-lg mb-12">An autopsy of your Google Drive. We looked at all your files to see what you were actually doing.</p>
+                    <h2 class="text-5xl sm:text-6xl md:text-[8rem] font-black uppercase leading-none mb-8">The <br>Digital <br>Hoard</h2>
+                    <p class="text-lg sm:text-xl md:text-2xl font-mono opacity-90 max-w-lg mb-12">An autopsy of your Google Drive. We looked at all your files to see what you were actually doing.</p>
                     
-                    <div class="bg-white border-2 border-ink shadow-[8px_8px_0px_0px_#1A1814] p-8 rounded-xl max-w-md transform -rotate-2">
+                    <div class="bg-white border-2 border-ink shadow-[6px_6px_0px_0px_#1A1814] md:shadow-[8px_8px_0px_0px_#1A1814] p-6 md:p-8 rounded-xl max-w-md md:transform md:-rotate-2">
                         <p class="font-mono uppercase text-sm font-bold text-gray-500 mb-2">Total 'Untitled' Files</p>
-                        <div class="text-7xl font-black text-accent-orange" id="untitled-count">--</div>
-                        <p class="mt-4 font-bold text-lg">Documents you never bothered to name. Classic.</p>
+                        <div class="text-5xl sm:text-7xl font-black text-accent-orange" id="untitled-count">--</div>
+                        <p class="mt-4 font-bold text-base sm:text-lg">Documents you never bothered to name. Classic.</p>
                     </div>
                 </div>
                 
@@ -272,31 +293,31 @@
         </section>
 
         <!-- THE FINAL WALL (BRUTALIST SUMMARY) -->
-        <section class="min-h-[100dvh] bg-ink text-cream py-32 px-6 md:px-16 flex flex-col items-center justify-center">
-            <h2 class="text-5xl md:text-7xl font-black uppercase mb-12 text-center w-full max-w-6xl">Your High School Career <br><span class="text-accent-blue">In One Screenshot</span></h2>
+        <section class="min-h-[100dvh] bg-ink text-cream py-16 md:py-32 px-6 md:px-16 flex flex-col items-center justify-center">
+            <h2 class="text-3xl sm:text-5xl md:text-7xl font-black uppercase mb-12 text-center w-full max-w-6xl">Your High School Career <br><span class="text-accent-blue">In One Screenshot</span></h2>
             
             <div class="w-full max-w-6xl brutalist-grid">
                 <div class="brutalist-cell text-ink flex flex-col justify-center">
                     <p class="font-mono text-sm uppercase font-bold text-gray-500">Emails Sent/Received</p>
-                    <p class="text-5xl md:text-7xl font-black mt-2" id="wall-emails">--</p>
+                    <p class="text-4xl sm:text-5xl md:text-7xl font-black mt-2" id="wall-emails">--</p>
                 </div>
                 <div class="brutalist-cell text-ink flex flex-col justify-center">
                     <p class="font-mono text-sm uppercase font-bold text-gray-500">Drive Files Created</p>
-                    <p class="text-5xl md:text-7xl font-black mt-2" id="wall-files">--</p>
+                    <p class="text-4xl sm:text-5xl md:text-7xl font-black mt-2" id="wall-files">--</p>
                 </div>
                 <div class="brutalist-cell text-ink flex flex-col justify-center">
                     <p class="font-mono text-sm uppercase font-bold text-gray-500">Chat Messages</p>
-                    <p class="text-5xl md:text-7xl font-black mt-2" id="wall-chats">--</p>
+                    <p class="text-4xl sm:text-5xl md:text-7xl font-black mt-2" id="wall-chats">--</p>
                 </div>
                 <div class="brutalist-cell text-ink flex flex-col justify-center">
                     <p class="font-mono text-sm uppercase font-bold text-gray-500">Google Classrooms</p>
-                    <p class="text-5xl md:text-7xl font-black mt-2" id="wall-classes">--</p>
+                    <p class="text-4xl sm:text-5xl md:text-7xl font-black mt-2" id="wall-classes">--</p>
                 </div>
             </div>
 
             <!-- Hall of Fame -->
-            <div class="w-full max-w-6xl mt-8 bg-cream text-ink p-8 border-2 border-cream final-panel">
-                <h3 class="text-4xl font-black uppercase mb-2">The Hall of Fame</h3>
+            <div class="w-full max-w-6xl mt-8 bg-cream text-ink p-6 md:p-8 border-2 border-cream final-panel">
+                <h3 class="text-2xl sm:text-4xl font-black uppercase mb-2">The Hall of Fame</h3>
                 <p class="font-mono mb-8 opacity-80">The people you bothered the most over email.</p>
                 <div class="flex flex-col md:flex-row gap-8" id="wall-top-people">
                     <!-- Injected via JS -->
@@ -304,8 +325,8 @@
             </div>
 
             <!-- Huge Files List -->
-            <div class="w-full max-w-6xl mt-8 bg-cream text-ink p-8 border-2 border-cream final-panel">
-                <h3 class="text-4xl font-black uppercase mb-2 flex items-center gap-4">
+            <div class="w-full max-w-6xl mt-8 bg-cream text-ink p-6 md:p-8 border-2 border-cream final-panel">
+                <h3 class="text-2xl sm:text-4xl font-black uppercase mb-2 flex items-center gap-4">
                     <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-orange"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
                     The Storage Hogs
                 </h3>
@@ -316,7 +337,7 @@
             </div>
 
             <div class="mt-24 text-center">
-                <p class="font-mono text-gray-500 uppercase text-lg mb-4">Built with <span class="text-accent-blue font-bold" style="text-shadow: 0 0 10px rgba(37, 99, 235, 0.8);">Antigravity</span> + <a href="https://github.com/Peteryhs" class="font-bold text-accent-yellow" style="text-shadow: 0 0 10px rgba(250, 204, 21, 0.8);">Peteryhs</a></p>
+                <p class="font-mono text-gray-500 uppercase text-lg mb-4">Built with <span class="text-accent-blue font-bold" style="text-shadow: 0 0 10px rgba(37, 99, 235, 0.8);">Antigravity</span> + <a href="https://github.com/Peteryhs" class="font-bold text-accent-yellow" style="text-shadow: 0 0 10px rgba(250, 204, 21, 0.8);">Peteryhs</a> + <a href="https://github.com/aidenpinto" class="font-bold text-accent-orange" style="text-shadow: 0 0 10px rgba(234, 88, 12, 0.8);">NerdyGuy4K</a></p>
             </div>
         </section>
     </main>
@@ -402,12 +423,12 @@
             // Bento Network
             const emailList = document.getElementById('email-list');
             connections.most_emailed.forEach(e => {
-                emailList.innerHTML += `<li class="text-3xl font-black truncate">${e}</li>`;
+                emailList.innerHTML += `<li class="text-lg sm:text-2xl md:text-3xl font-black truncate">${e}</li>`;
             });
 
             const chatList = document.getElementById('chat-list');
             connections.most_messaged_chats.forEach(c => {
-                chatList.innerHTML += `<div class="bg-accent-blue text-white px-4 py-2 rounded-full font-bold text-xl">${c}</div>`;
+                chatList.innerHTML += `<div class="bg-accent-blue text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold text-base sm:text-lg md:text-xl">${c}</div>`;
             });
 
             document.getElementById('top-format').innerText = files.most_common_type;
@@ -429,11 +450,11 @@
                     
                     typesList.innerHTML += `
                         <div class="file-type-row">
-                            <div class="flex justify-between font-bold text-xl mb-2">
+                            <div class="flex justify-between font-bold text-lg sm:text-xl mb-2">
                                 <span>${ext}</span>
                                 <span class="font-mono">${count} files</span>
                             </div>
-                            <div class="w-full h-8 bg-ink/10 rounded-full overflow-hidden">
+                            <div class="w-full h-6 sm:h-8 bg-ink/10 rounded-full overflow-hidden">
                                 <div class="h-full ${barColor} file-type-bar" style="width: 0%;" data-target="${widthPercent}"></div>
                             </div>
                         </div>
@@ -464,8 +485,8 @@
                 topPeopleDiv.innerHTML += `
                     <div class="flex-1 border-l-4 border-ink pl-4">
                         <div class="text-3xl font-black ${rankColors[i]}">#${i + 1}</div>
-                        <div class="text-2xl font-bold uppercase mt-1">${name}</div>
-                        <div class="font-mono text-sm opacity-60 mt-1">${email}</div>
+                        <div class="text-2xl font-bold uppercase mt-1 break-all">${name}</div>
+                        <div class="font-mono text-sm opacity-60 mt-1 break-all">${email}</div>
                     </div>
                 `;
             });
@@ -485,14 +506,14 @@
                 const rankColors = ['text-accent-pink', 'text-accent-orange', 'text-accent-yellow'];
                 hugeFiles.innerHTML += `
                     <div class="flex-1 border-l-4 border-ink pl-4 pt-1">
-                        <div class="flex items-center justify-between mb-2">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 mb-2">
                             <div class="flex items-center gap-3 ${rankColors[i]}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
                                 <span class="font-black text-xl uppercase tracking-wider">Hog #${i + 1}</span>
                             </div>
-                            <span class="font-mono font-bold text-lg opacity-60">${formatBytes(f.size)}</span>
+                            <span class="font-mono font-bold text-base sm:text-lg opacity-60">${formatBytes(f.size)}</span>
                         </div>
-                        <div class="text-xl font-bold font-mono text-ink opacity-90 break-all">${f.name}</div>
+                        <div class="text-lg sm:text-xl font-bold font-mono text-ink opacity-90 break-all">${f.name}</div>
                     </div>
                 `;
             });
@@ -516,42 +537,80 @@
                 ease: "linear"
             });
 
-            // Night Owl Pin
-            ScrollTrigger.create({
-                trigger: "#night-owl-wrap",
-                start: "top top",
-                end: "+=100%",
-                pin: true,
-                pinSpacing: true,
-            });
-            gsap.from("#active-hour", {
-                scrollTrigger: {
-                    trigger: "#night-owl-wrap",
-                    start: "top center",
-                    end: "top top",
-                    scrub: true
-                },
-                scale: 0.5,
-                opacity: 0,
-                rotation: -10
+            // Create matchMedia
+            let mm = gsap.matchMedia();
+
+            // Desktop animations (width >= 768px)
+            mm.add("(min-width: 768px)", () => {
+                // Horizontal Pan for Crunch Time
+                const track = document.getElementById('crunch-track');
+                const wrap = document.getElementById('crunch-wrap');
+                
+                gsap.to(track, {
+                    x: () => -(track.scrollWidth - window.innerWidth),
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: wrap,
+                        start: "top top",
+                        end: () => `+=${track.scrollWidth - window.innerWidth}`,
+                        pin: true,
+                        scrub: 1,
+                        invalidateOnRefresh: true
+                    }
+                });
             });
 
-            // Horizontal Pan for Crunch Time
-            const track = document.getElementById('crunch-track');
-            const wrap = document.getElementById('crunch-wrap');
-            
-            gsap.to(track, {
-                x: () => -(track.scrollWidth - window.innerWidth),
-                ease: "none",
+            // Night Owl Slide Transition (pinned and scrubbed on all screens)
+            const owlTimeline = gsap.timeline({
                 scrollTrigger: {
-                    trigger: wrap,
+                    trigger: "#night-owl-wrap",
                     start: "top top",
-                    end: () => `+=${track.scrollWidth - window.innerWidth}`,
+                    end: "+=150%",
                     pin: true,
+                    pinSpacing: true,
                     scrub: 1,
                     invalidateOnRefresh: true
                 }
             });
+
+            // Slide 1 elements fade out & slide up
+            owlTimeline.to("#owl-slide-1 h2", {
+                opacity: 0,
+                y: -60,
+                duration: 0.6,
+                ease: "power2.inOut"
+            })
+            .to("#owl-slide-1 p", {
+                opacity: 0,
+                y: -40,
+                duration: 0.6,
+                ease: "power2.inOut"
+            }, "-=0.4")
+            .to("#owl-slide-1", {
+                pointerEvents: "none",
+                duration: 0.1
+            }, "-=0.2")
+            
+            // Slide 2 container fades in & pointer events enabled
+            .to("#owl-slide-2", {
+                opacity: 1,
+                pointerEvents: "auto",
+                duration: 0.4
+            }, "-=0.2")
+
+            // Active hour number scales & rotates in
+            .fromTo("#active-hour",
+                { scale: 0.4, y: 80, opacity: 0, rotation: -10 },
+                { scale: 1, y: 0, opacity: 1, rotation: 0, duration: 1, ease: "back.out(1.5)" },
+                "-=0.2"
+            )
+
+            // Description elements slide up
+            .fromTo("#owl-slide-2 p",
+                { y: 40, opacity: 0 },
+                { y: 0, opacity: 1, stagger: 0.15, duration: 0.8, ease: "power2.out" },
+                "-=0.6"
+            );
 
             // Bento entry
             gsap.fromTo(".bento-cell", 
