@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High School Wrapped</title>
+    
+    <!-- Fonts -->
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,900,500,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#F9F6F0',
+                        ink: '#1A1814',
+                        accent: {
+                            blue: '#2563EB',
+                            orange: '#EA580C',
+                            pink: '#DB2777',
+                            green: '#16A34A',
+                            yellow: '#FACC15'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Cabinet Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        body {
+            background-color: #F9F6F0;
+            color: #1A1814;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            cursor: default;
+        }
+        
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: #1A1814;
+            color: #F9F6F0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .outline-text {
+            color: transparent;
+            -webkit-text-stroke: 2px #1A1814;
+        }
+        
+        .outline-text-cream {
+            color: transparent;
+            -webkit-text-stroke: 2px #F9F6F0;
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+        }
+        
+        .bento-cell {
+            background: #fff;
+            border: 2px solid #1A1814;
+            box-shadow: 8px 8px 0px 0px rgba(26,24,20,1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .bento-cell:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0px 0px rgba(26,24,20,1);
+        }
+        
+        /* Brutalist wall border */
+        .brutalist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2px;
+            background-color: #1A1814;
+            border: 2px solid #1A1814;
+        }
+        .brutalist-cell {
+            background-color: #F9F6F0;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="font-display">
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loader">
+        <h1 class="text-5xl md:text-8xl font-black mb-4">CRUNCHING DATA</h1>
+        <p class="font-mono text-lg text-accent-yellow" id="load-status">Fetching your 4 years...</p>
+    </div>
+
+    <main id="main-content" class="opacity-0 hidden">
+        
+        <!-- HERO SECTION -->
+        <section class="h-[100dvh] flex flex-col justify-center px-6 md:px-16 relative">
+            <div class="text-[15vw] leading-[0.8] font-black uppercase tracking-tighter" id="hero-title">
+                <div class="overflow-hidden"><div class="hero-line">Your</div></div>
+                <div class="overflow-hidden"><div class="hero-line text-accent-blue">High School</div></div>
+                <div class="overflow-hidden"><div class="hero-line outline-text">Career</div></div>
+                <div class="overflow-hidden"><div class="hero-line">Wrapped</div></div>
+            </div>
+            <div class="absolute bottom-10 left-6 md:left-16 font-mono uppercase tracking-widest text-sm flex gap-8">
+                <div>Scroll down to begin</div>
+                <div id="data-count">Total Data Points: ---</div>
+            </div>
+        </section>
+
+        <!-- MARQUEE SECTION -->
+        <section class="py-12 border-y-4 border-ink bg-accent-yellow overflow-hidden whitespace-nowrap flex" id="marquee-section">
+            <div class="marquee-track text-6xl md:text-8xl font-black uppercase tracking-tight" id="marquee-content">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- THE NIGHT OWL (PINNED REVEAL) -->
+        <section id="night-owl-wrap" class="relative">
+            <div id="night-owl-panel" class="min-h-[100dvh] bg-ink text-cream flex items-center justify-center p-6 md:p-16">
+                <div class="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-6xl md:text-8xl font-black uppercase leading-none mb-6">Were you a <span class="outline-text-cream">night owl?</span></h2>
+                        <p class="text-xl md:text-2xl font-mono opacity-80 max-w-lg">We analyzed the timestamps of every file you edited and downloaded over 4 years.</p>
+                    </div>
+                    <div class="flex flex-col items-start md:items-end text-left md:text-right">
+                        <div class="text-[12rem] md:text-[18rem] font-black leading-none text-accent-orange" id="active-hour">--</div>
+                        <p class="text-3xl font-bold uppercase mt-4">Peak Activity Hour</p>
+                        <p class="font-mono mt-4 max-w-sm" id="night-owl-desc">--</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CRUNCH TIME (HORIZONTAL PAN) -->
+        <section id="crunch-wrap" class="relative overflow-hidden bg-accent-blue text-cream">
+            <div id="crunch-track" class="flex h-[100dvh] items-center px-16 w-[300vw]">
+                <!-- Intro Slide -->
+                <div class="w-screen flex-shrink-0 px-8">
+                    <h2 class="text-7xl md:text-[10rem] font-black uppercase leading-none">The <br>Crunch <br><span class="text-ink">Time</span></h2>
+                    <p class="font-mono text-2xl mt-8 max-w-xl">When did you work the hardest? By overlaying Drive edits, emails, and chats, we found your peak stress months.</p>
+                </div>
+                
+                <!-- Slide 1 -->
+                <div class="w-screen flex-shrink-0 px-8 flex flex-col justify-center h-full">
+                    <p class="font-mono text-2xl text-accent-yellow mb-4 flex items-center gap-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>
+                        #1 Busiest Month
+                    </p>
+                    <h3 class="text-[8rem] font-black leading-none uppercase" id="crunch-1-date">---</h3>
+                    <p class="text-3xl mt-4 font-bold" id="crunch-1-score">--- activity points</p>
+                    
+                    <div class="mt-8 flex gap-8 font-mono opacity-90 border-t-2 border-cream/20 pt-8 max-w-2xl">
+                        <div>
+                            <span class="block text-sm uppercase text-accent-yellow mb-1">Drive Edits</span>
+                            <span class="font-bold text-3xl" id="crunch-1-drive">--</span>
+                        </div>
+                        <div>
+                            <span class="block text-sm uppercase text-accent-yellow mb-1">Emails</span>
+                            <span class="font-bold text-3xl" id="crunch-1-mail">--</span>
+                        </div>
+                        <div>
+                            <span class="block text-sm uppercase text-accent-yellow mb-1">Chats</span>
+                            <span class="font-bold text-3xl" id="crunch-1-chat">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 & 3 -->
+                <div class="w-screen flex-shrink-0 px-8 flex items-center gap-16 h-full">
+                    <div>
+                        <p class="font-mono text-xl text-accent-yellow mb-2">#2 Busiest Month</p>
+                        <h3 class="text-6xl md:text-[6rem] font-black leading-none uppercase" id="crunch-2-date">---</h3>
+                        <p class="text-2xl mt-2 font-bold" id="crunch-2-score">--- activity points</p>
+                    </div>
+                    <div>
+                        <p class="font-mono text-xl text-accent-yellow mb-2">#3 Busiest Month</p>
+                        <h3 class="text-6xl md:text-[6rem] font-black leading-none uppercase" id="crunch-3-date">---</h3>
+                        <p class="text-2xl mt-2 font-bold" id="crunch-3-score">--- activity points</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONNECTIONS BENTO GRID -->
+        <section class="py-32 px-6 md:px-16 bg-cream">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-6xl md:text-8xl font-black uppercase leading-none mb-4 text-center md:text-left">The <span class="text-accent-pink">Network</span></h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Most Emailed -->
+                    <div class="bento-cell md:col-span-2 bg-white">
+                        <h3 class="font-mono uppercase tracking-widest text-sm text-gray-500 mb-8">Most Emailed Contacts</h3>
+                        <ul class="space-y-4" id="email-list">
+                            <!-- Injected -->
+                        </ul>
+                    </div>
+                    
+                    <!-- File Stats -->
+                    <div class="bento-cell bg-accent-pink text-white flex flex-col justify-between">
+                        <h3 class="font-mono uppercase tracking-widest text-sm text-white/80 mb-8">Top File Format</h3>
+                        <div>
+                            <div class="text-7xl font-black" id="top-format">---</div>
+                            <p class="mt-4 font-bold text-xl">The classic high school format.</p>
+                        </div>
+                    </div>
+
+                    <!-- Clubs -->
+                    <div class="bento-cell bg-ink text-cream flex flex-col justify-between">
+                        <h3 class="font-mono uppercase tracking-widest text-sm text-cream/70 mb-8">Extracurriculars</h3>
+                        <div>
+                            <div class="text-8xl font-black text-accent-green" id="club-count">--</div>
+                            <p class="mt-2 font-bold text-xl">Clubs & Teams Joined</p>
+                        </div>
+                    </div>
+
+                    <!-- Chat Groups -->
+                    <div class="bento-cell md:col-span-2 bg-white">
+                        <h3 class="font-mono uppercase tracking-widest text-sm text-gray-500 mb-8">Most Active Group Chats</h3>
+                        <div class="flex flex-wrap gap-4" id="chat-list">
+                            <!-- Injected -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE DIGITAL HOARD (DRIVE STATS) -->
+        <section class="py-32 px-6 md:px-16 bg-accent-yellow text-ink border-t-4 border-ink">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-6xl md:text-[8rem] font-black uppercase leading-none mb-8">The <br>Digital <br>Hoard</h2>
+                    <p class="text-xl md:text-2xl font-mono opacity-90 max-w-lg mb-12">An autopsy of your Google Drive. We looked at all your files to see what you were actually doing.</p>
+                    
+                    <div class="bg-white border-2 border-ink shadow-[8px_8px_0px_0px_#1A1814] p-8 rounded-xl max-w-md transform -rotate-2">
+                        <p class="font-mono uppercase text-sm font-bold text-gray-500 mb-2">Total 'Untitled' Files</p>
+                        <div class="text-7xl font-black text-accent-orange" id="untitled-count">--</div>
+                        <p class="mt-4 font-bold text-lg">Documents you never bothered to name. Classic.</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-mono uppercase tracking-widest text-sm font-bold mb-8">Your Top File Types</h3>
+                    <div class="space-y-6" id="file-types-list">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE FINAL WALL (BRUTALIST SUMMARY) -->
+        <section class="min-h-[100dvh] bg-ink text-cream py-32 px-6 md:px-16 flex flex-col items-center justify-center">
+            <h2 class="text-5xl md:text-7xl font-black uppercase mb-12 text-center w-full max-w-6xl">Your High School Career <br><span class="text-accent-blue">In One Screenshot</span></h2>
+            
+            <div class="w-full max-w-6xl brutalist-grid">
+                <div class="brutalist-cell text-ink flex flex-col justify-center">
+                    <p class="font-mono text-sm uppercase font-bold text-gray-500">Emails Sent/Received</p>
+                    <p class="text-5xl md:text-7xl font-black mt-2" id="wall-emails">--</p>
+                </div>
+                <div class="brutalist-cell text-ink flex flex-col justify-center">
+                    <p class="font-mono text-sm uppercase font-bold text-gray-500">Drive Files Created</p>
+                    <p class="text-5xl md:text-7xl font-black mt-2" id="wall-files">--</p>
+                </div>
+                <div class="brutalist-cell text-ink flex flex-col justify-center">
+                    <p class="font-mono text-sm uppercase font-bold text-gray-500">Chat Messages</p>
+                    <p class="text-5xl md:text-7xl font-black mt-2" id="wall-chats">--</p>
+                </div>
+                <div class="brutalist-cell text-ink flex flex-col justify-center">
+                    <p class="font-mono text-sm uppercase font-bold text-gray-500">Google Classrooms</p>
+                    <p class="text-5xl md:text-7xl font-black mt-2" id="wall-classes">--</p>
+                </div>
+            </div>
+
+            <!-- Hall of Fame -->
+            <div class="w-full max-w-6xl mt-8 bg-cream text-ink p-8 border-2 border-cream final-panel">
+                <h3 class="text-4xl font-black uppercase mb-2">The Hall of Fame</h3>
+                <p class="font-mono mb-8 opacity-80">The people you bothered the most over email.</p>
+                <div class="flex flex-col md:flex-row gap-8" id="wall-top-people">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <!-- Huge Files List -->
+            <div class="w-full max-w-6xl mt-8 bg-cream text-ink p-8 border-2 border-cream final-panel">
+                <h3 class="text-4xl font-black uppercase mb-2 flex items-center gap-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-orange"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+                    The Storage Hogs
+                </h3>
+                <p class="font-mono mb-8 opacity-80">The massive files that ate all your Google Drive space.</p>
+                <div class="flex flex-col md:flex-row gap-8" id="wall-huge-files">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <div class="mt-24 text-center">
+                <p class="font-mono text-gray-500 uppercase text-lg mb-4">Built with <span class="text-accent-blue font-bold" style="text-shadow: 0 0 10px rgba(37, 99, 235, 0.8);">Antigravity</span> + <a href="https://github.com/Peteryhs" class="font-bold text-accent-yellow" style="text-shadow: 0 0 10px rgba(250, 204, 21, 0.8);">Peteryhs</a></p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Register GSAP plugins
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Fetch Data
+        async function loadData() {
+            try {
+                // Ensure to load it via HTTP server, otherwise fetching local JSON throws CORS
+                const res = await fetch('./data/high_school_career_summary.json');
+                const data = await res.json();
+                populateData(data);
+                
+                // Hide loader, show main content
+                document.getElementById('loader').style.display = 'none';
+                const main = document.getElementById('main-content');
+                main.classList.remove('hidden');
+                main.classList.remove('opacity-0');
+                
+                initAnimations();
+            } catch (err) {
+                console.error(err);
+                document.getElementById('load-status').innerText = "Error loading data. Make sure you are running a local server (e.g., python -m http.server)";
+                document.getElementById('load-status').classList.remove('text-accent-yellow');
+                document.getElementById('load-status').classList.add('text-accent-pink');
+            }
+        }
+
+        function populateData(data) {
+            const overview = data.overview;
+            const analytics = data.advanced_analytics;
+            const connections = data.top_connections;
+            const files = data.top_files;
+
+            // Hero
+            document.getElementById('data-count').innerText = `Total Data Points: ${overview.total_emails + overview.total_drive_files + overview.total_chat_messages}`;
+            
+            // Marquee
+            const marqueeStr = `★ ${overview.total_emails} EMAILS ★ ${overview.total_drive_files} DRIVE FILES ★ ${overview.total_chat_messages} CHATS ★ ${overview.total_classes_joined} COURSES ★ ${overview.total_clubs_joined} CLUBS `;
+            document.getElementById('marquee-content').innerText = marqueeStr.repeat(10); // repeat to ensure overflow
+
+            // Night Owl
+            document.getElementById('active-hour').innerText = analytics.most_active_hour;
+            let owlDesc = `Only ${analytics.night_owl_percentage}% of your activity happened between 10PM and 4AM. You were a morning person!`;
+            if (analytics.night_owl_percentage > 20) {
+                owlDesc = `${analytics.night_owl_percentage}% of your activity happened between 10PM and 4AM. Certified Night Owl!`;
+            }
+            document.getElementById('night-owl-desc').innerText = owlDesc;
+
+            // Crunch Time
+            const c1 = analytics.top_3_crunch_months[0];
+            const c2 = analytics.top_3_crunch_months[1];
+            const c3 = analytics.top_3_crunch_months[2];
+            
+            // Format month function e.g. "2024-12" -> "Dec 2024"
+            const formatMonth = (m) => {
+                const [year, month] = m.split('-');
+                const d = new Date(year, parseInt(month)-1);
+                return d.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+            };
+
+            if(c1) {
+                document.getElementById('crunch-1-date').innerText = formatMonth(c1.month);
+                document.getElementById('crunch-1-score').innerText = `${c1.activity_score} activity points`;
+                if(c1.breakdown) {
+                    document.getElementById('crunch-1-drive').innerText = c1.breakdown.drive;
+                    document.getElementById('crunch-1-mail').innerText = c1.breakdown.mail;
+                    document.getElementById('crunch-1-chat').innerText = c1.breakdown.chat;
+                }
+            }
+            if(c2) {
+                document.getElementById('crunch-2-date').innerText = formatMonth(c2.month);
+                document.getElementById('crunch-2-score').innerText = `${c2.activity_score} activity points`;
+            }
+            if(c3) {
+                document.getElementById('crunch-3-date').innerText = formatMonth(c3.month);
+                document.getElementById('crunch-3-score').innerText = `${c3.activity_score} activity points`;
+            }
+
+            // Bento Network
+            const emailList = document.getElementById('email-list');
+            connections.most_emailed.forEach(e => {
+                emailList.innerHTML += `<li class="text-3xl font-black truncate">${e}</li>`;
+            });
+
+            const chatList = document.getElementById('chat-list');
+            connections.most_messaged_chats.forEach(c => {
+                chatList.innerHTML += `<div class="bg-accent-blue text-white px-4 py-2 rounded-full font-bold text-xl">${c}</div>`;
+            });
+
+            document.getElementById('top-format').innerText = files.most_common_type;
+            document.getElementById('club-count').innerText = overview.total_clubs_joined;
+            
+            // Drive Hoard
+            document.getElementById('untitled-count').innerText = files.unnamed_files_count || 0;
+            
+            const typesList = document.getElementById('file-types-list');
+            const maxFiles = files.top_5_types && files.top_5_types.length > 0 ? files.top_5_types[0][1] : 1;
+            if (files.top_5_types) {
+                files.top_5_types.forEach((type, index) => {
+                    const ext = type[0];
+                    const count = type[1];
+                    const widthPercent = Math.max((count / maxFiles) * 100, 5); // at least 5% wide
+                    const colors = ['bg-accent-blue', 'bg-accent-pink', 'bg-accent-green', 'bg-ink', 'bg-accent-orange'];
+                    const barColor = colors[index % colors.length];
+                    const textColor = index === 4 ? 'text-ink' : 'text-cream';
+                    
+                    typesList.innerHTML += `
+                        <div class="file-type-row">
+                            <div class="flex justify-between font-bold text-xl mb-2">
+                                <span>${ext}</span>
+                                <span class="font-mono">${count} files</span>
+                            </div>
+                            <div class="w-full h-8 bg-ink/10 rounded-full overflow-hidden">
+                                <div class="h-full ${barColor} file-type-bar" style="width: 0%;" data-target="${widthPercent}"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            // Final Wall
+            document.getElementById('wall-emails').innerText = overview.total_emails;
+            document.getElementById('wall-files').innerText = overview.total_drive_files;
+            document.getElementById('wall-chats').innerText = overview.total_chat_messages;
+            document.getElementById('wall-classes').innerText = overview.total_classes_joined;
+            
+            // Hall of fame logic
+            const formatName = (emailString) => {
+                const match = emailString.match(/^(.*?)\s*<(.*?)>$/);
+                if (match) {
+                    return { name: match[1].trim(), email: match[2].trim() };
+                }
+                return { name: emailString.split('@')[0], email: emailString };
+            };
+            
+            const hallOfFame = connections.most_emailed.slice(0, 3);
+            const topPeopleDiv = document.getElementById('wall-top-people');
+            hallOfFame.forEach((emailString, i) => {
+                const rankColors = ['text-accent-yellow', 'text-gray-400', 'text-orange-400']; // Gold, Silver, Bronze
+                const { name, email } = formatName(emailString);
+                topPeopleDiv.innerHTML += `
+                    <div class="flex-1 border-l-4 border-ink pl-4">
+                        <div class="text-3xl font-black ${rankColors[i]}">#${i + 1}</div>
+                        <div class="text-2xl font-bold uppercase mt-1">${name}</div>
+                        <div class="font-mono text-sm opacity-60 mt-1">${email}</div>
+                    </div>
+                `;
+            });
+
+            // Storage Hogs
+            const formatBytes = (bytes) => {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            };
+
+            const hugeFiles = document.getElementById('wall-huge-files');
+            const top3Files = files.largest_files.slice(0, 3);
+            top3Files.forEach((f, i) => {
+                const rankColors = ['text-accent-pink', 'text-accent-orange', 'text-accent-yellow'];
+                hugeFiles.innerHTML += `
+                    <div class="flex-1 border-l-4 border-ink pl-4 pt-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3 ${rankColors[i]}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                                <span class="font-black text-xl uppercase tracking-wider">Hog #${i + 1}</span>
+                            </div>
+                            <span class="font-mono font-bold text-lg opacity-60">${formatBytes(f.size)}</span>
+                        </div>
+                        <div class="text-xl font-bold font-mono text-ink opacity-90 break-all">${f.name}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function initAnimations() {
+            // Hero Entry
+            gsap.from(".hero-line", {
+                y: 200,
+                duration: 1.2,
+                stagger: 0.15,
+                ease: "power4.out",
+                delay: 0.2
+            });
+
+            // Marquee infinite scroll
+            gsap.to(".marquee-track", {
+                xPercent: -50,
+                repeat: -1,
+                duration: 20,
+                ease: "linear"
+            });
+
+            // Night Owl Pin
+            ScrollTrigger.create({
+                trigger: "#night-owl-wrap",
+                start: "top top",
+                end: "+=100%",
+                pin: true,
+                pinSpacing: true,
+            });
+            gsap.from("#active-hour", {
+                scrollTrigger: {
+                    trigger: "#night-owl-wrap",
+                    start: "top center",
+                    end: "top top",
+                    scrub: true
+                },
+                scale: 0.5,
+                opacity: 0,
+                rotation: -10
+            });
+
+            // Horizontal Pan for Crunch Time
+            const track = document.getElementById('crunch-track');
+            const wrap = document.getElementById('crunch-wrap');
+            
+            gsap.to(track, {
+                x: () => -(track.scrollWidth - window.innerWidth),
+                ease: "none",
+                scrollTrigger: {
+                    trigger: wrap,
+                    start: "top top",
+                    end: () => `+=${track.scrollWidth - window.innerWidth}`,
+                    pin: true,
+                    scrub: 1,
+                    invalidateOnRefresh: true
+                }
+            });
+
+            // Bento entry
+            gsap.fromTo(".bento-cell", 
+                { y: 100, opacity: 0 },
+                {
+                    scrollTrigger: {
+                        trigger: ".bento-cell",
+                        start: "top 80%"
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: "back.out(1.2)"
+                }
+            );
+            
+            // File Type Bars Animation
+            gsap.utils.toArray('.file-type-bar').forEach(bar => {
+                gsap.to(bar, {
+                    scrollTrigger: {
+                        trigger: "#file-types-list",
+                        start: "top 80%"
+                    },
+                    width: bar.dataset.target + "%",
+                    duration: 1.5,
+                    ease: "power3.out"
+                });
+            });
+
+            // Final Wall Elements
+            gsap.from(".brutalist-cell", {
+                scrollTrigger: {
+                    trigger: ".brutalist-grid",
+                    start: "top 80%"
+                },
+                scale: 0.8,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "back.out(1.5)"
+            });
+
+            gsap.utils.toArray('.final-panel').forEach(panel => {
+                gsap.fromTo(panel, 
+                    { y: 50, opacity: 0 },
+                    {
+                        scrollTrigger: {
+                            trigger: panel,
+                            start: "top 90%"
+                        },
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        ease: "power3.out"
+                    }
+                );
+            });
+        }
+
+        // Run
+        window.addEventListener('load', loadData);
+    </script>
+</body>
+</html>
