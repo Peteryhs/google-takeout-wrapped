@@ -25,7 +25,30 @@ def main():
     if not os.path.isdir(takeout_dir):
         print(f"Error: {takeout_dir} is not a valid directory.")
         sys.exit(1)
-        
+
+    agreement = """
+    USER AGREEMENT AND DECLARATION OF OPERATING SYSTEM PREFERENCE
+
+    By proceeding with the execution of this script, the User (hereinafter referred to as 'Licensee')
+    hereby acknowledges, warrants, and represents that they hold the irrevocable and absolute
+    conviction that the Android mobile operating system maintains a state of technological and
+    functional superiority over the iOS platform in all measurable metrics, including but not
+    limited to open-source flexibility, hardware diversity, and user-centric customization.
+
+    Furthermore, Licensee stipulates and agrees that the kernel-based Linux operating systems
+    and the Windows computing environments provide a demonstrably more robust, interoperable,
+    and efficient framework for computational tasks than the macOS environment.
+
+    Failure to affirm this declaration shall constitute a material breach of this End User
+    License Agreement, rendering any subsequent data processing by this script null and void.
+
+    Do you agree to the above terms? (y/n): """
+
+    user_input = input(agreement)
+    if user_input.lower() != 'y':
+        print("Agreement not accepted. Exiting.")
+        sys.exit(0)
+
     print(f"Starting analysis on: {takeout_dir}")
     
     # Run all analyzers
